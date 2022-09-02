@@ -1,0 +1,63 @@
+def transform(m, k, is_encoding):
+    a = ord('a')
+    z = ord('z')
+    A = ord('A')
+    Z = ord('Z')
+    m = ord(m)
+    k = ord(k)
+    if k >= a and k <= z:
+        k = k - a
+    if k >= A and k <= Z:
+        k = k - A
+    if not is_encoding:
+        k = -k
+    if m >= a and m <= z:
+        m += k
+        if m > z:
+            m = m - z + a - 1
+        if m < a:
+            m = m + z - a + 1
+    if m >= A and m <= Z:
+        m += k
+        if m > Z:
+            m = m - Z + A - 1
+        if m < A:
+            m = m + Z - A + 1
+    m = chr(m)
+    return m
+
+
+def VigenereCipher_Encoding(M, K):
+    # M : message, string
+    # K : key, string
+    C = ''
+    while len(M) > len(K):
+        K += K
+
+    for i in range(len(M)):
+        if M[i] == ' ':
+            continue
+        M = M[:i] + transform(M[i], K[i], True) + M[i+1:]
+
+    return M
+
+def VigenereCipher_Decoding(M, K):
+    # M : message, string
+    # K : key, string
+    C = ''
+    while len(M) > len(K):
+        K += K
+
+    for i in range(len(M)):
+        if M[i] == ' ':
+            continue
+        M = M[:i] + transform(M[i], K[i], False) + M[i+1:]
+
+    return M
+
+M = 'attack at dawn'
+K = 'lemon'
+C = VigenereCipher_Encoding(M, K)
+MM = VigenereCipher_Decoding(C, K)
+print(C)
+print(MM)
